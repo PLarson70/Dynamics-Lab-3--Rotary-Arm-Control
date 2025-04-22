@@ -70,3 +70,42 @@ for i = 1:length(K_ptheta)
     legend('Arm', 'Amp','5% Settling Time','Max Overshoot');
     grid on;
 end
+
+K_ptheta = 15;
+K_dtheta = 1;
+
+
+    n1 = (K_ptheta*Kg*Km) / (J*Rm);
+    d2 = 1;
+    d1 = (Kg^2*Km^2) / (J*Rm) + (K_dtheta*Kg*Km) / (J*Rm);
+    d0 = (K_ptheta*Kg*Km) / (J*Rm);
+
+    num = n1;
+    den = [d2 d1 d0];
+    sysTF = tf(num, den);
+    
+    y = lsim(sysTF, u, t);
+
+    figure();
+    hold on;
+    plot(t,y);
+   plot(t, u, LineWidth=1);
+
+    yline(0.475,':k');
+    yline(0.525,':k');
+    xline(1,'--r')
+    yline(-0.475,':k');
+    yline(-0.525,':k');
+    xline(6,'--r')
+
+    yline(0.4,'--k');
+    yline(0.6,'--k');
+    yline(-0.4,'--k');
+    yline(-0.6,'--k');
+
+
+    title(['K1 = ', num2str(K_ptheta), ', K3 = ', num2str(K_dtheta)]);
+    xlabel('Time');
+    ylabel('Output');
+    legend('Arm', 'Amp','5% Settling Time','Max Overshoot');
+    grid on;
